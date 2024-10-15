@@ -130,9 +130,11 @@ createApp({
         .then((resp) => resp.json())
         .then((json) => {
           Object.entries(json).forEach(([symbol, v]) => {
+            const keywords = v.keywords.map((k) => k.toLowerCase());
             emojis.push({
               symbol,
-              ...v,
+              keywords,
+              name: v.name,
             });
           });
         });
@@ -153,7 +155,7 @@ createApp({
       const task = new Task(this.newTask);
 
       const matchingEmojis = emojis.filter((e) =>
-        e.keywords.includes(this.newTask)
+        e.keywords.includes(this.newTask.toLowerCase())
       );
       if (matchingEmojis.length > 0) {
         task.emoji =
