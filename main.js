@@ -47,15 +47,24 @@ createApp({
       newList: "",
     };
   },
+  mounted() {
+    this.$refs.newTaskEl.focus();
+  },
   computed: {
-    openTasks() {
-      return this.tasks.filter((t) => !t.completed);
-    },
-    completedTasks() {
-      return this.tasks.filter((t) => t.completed);
-    },
     currentList() {
-      return this.lists.find((l) => l.selected)?.name;
+      return this.lists.find((l) => l.selected).name;
+    },
+    allTasks() {
+      return this.tasks.toSorted((left, right) => {
+        if (left.completed && !right.completed) {
+          return 1;
+        }
+        if (!left.completed && right.completed) {
+          return -1;
+        }
+        // else order by last updated first
+        return right.updated.getTime() - left.updated.getTime();
+      });
     },
   },
   watch: {
@@ -67,6 +76,10 @@ createApp({
     },
   },
   methods: {
+    toggleCompleted(task) {
+      task.completed = !task.completed;
+      task.updated = new Date();
+    },
     addTask() {
       if (!this.newTask) {
         return;

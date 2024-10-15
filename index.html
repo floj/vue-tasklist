@@ -27,6 +27,7 @@
     <div id="app" class="container mt-3">
         <div class="input-group mb-3">
           <input
+            ref="newTaskEl"
             class="form-control form-control-lg"
             type="text"
             placeholder="Ich brauche..."
@@ -67,32 +68,23 @@
           </ul>
         </div>
       </form>
-      <h2>Offen</h2>
-      <ul class="list-group mb-3">
-        <li v-for="task in openTasks" class="list-group-item" :key="task.id">
-          <label class="form-check-label w-100">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              v-model="task.completed"
-            />
-            {{ task.name }}
-            <a href="#" class="float-end" @click.prevent="removeTask(task)"><i class="bi bi-trash"></i></a>
-          </label>
-        </li>
-      </ul>
-      <h2>Erledigt</h2>
-      <ul class="list-group">
+      <div class="alert alert-success" role="alert" v-if="allTasks.length == 0">
+        Beginne, indem Du neue Einträge hinzufügst.
+      </div>
+      <ul class="list-group" v-else>
         <li
-          v-for="task in completedTasks"
+          v-for="task in allTasks"
           class="list-group-item"
           :key="task.id"
         >
-          <label class="form-check-label w-100 text-decoration-line-through">
+          <label class="form-check-label w-100" :class="{
+            'text-decoration-line-through': task.completed
+          }">
             <input
               class="form-check-input"
               type="checkbox"
-              v-model="task.completed"
+              @change="toggleCompleted(task)"
+              :checked="task.completed"
             />
             {{ task.name }}
             <a href="#" class="float-end" @click.prevent="removeTask(task)"><i class="bi bi-trash"></i></a>
