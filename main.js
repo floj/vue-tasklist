@@ -152,9 +152,14 @@ createApp({
       }
       const task = new Task(this.newTask);
 
-      const emoji = emojis.find((e) => e.keywords.includes(this.newTask));
-      if (emoji) {
-        task.emoji = emoji.symbol;
+      const matchingEmojis = emojis.filter((e) =>
+        e.keywords.includes(this.newTask)
+      );
+      if (matchingEmojis.length > 0) {
+        task.emoji =
+          matchingEmojis[
+            Math.floor(Math.random() * matchingEmojis.length)
+          ].symbol;
       }
 
       this.selectedList.tasks.push(task);
