@@ -41,14 +41,6 @@ class Task {
     this.title = title;
     this.emoji = "";
   }
-
-  restore() {
-    ["created", "updated"].forEach((prop) => {
-      if (typeof this[prop] === "string") {
-        this[prop] = new Date(this[prop]);
-      }
-    });
-  }
 }
 
 class State {
@@ -56,6 +48,7 @@ class State {
   lists;
   /** @type {string} */
   currentList;
+  darkmode = false;
 }
 
 function saveState(state) {
@@ -67,10 +60,6 @@ function restoreState() {
   const v = localStorage.getItem("taskState");
   if (v) {
     const state = JSON.parse(v);
-    state.lists.forEach((l) => {
-      l.created = new Date(l.created);
-      l.updated = new Date(l.updated);
-    });
     return state;
   }
   const initialState = new State();
@@ -94,6 +83,7 @@ createApp({
   mounted() {
     this.$refs.newTaskEl.focus();
     this.loadEmojis();
+    document.body.dataset.bsTheme = this.state.darkmode ? "dark" : "light";
   },
   computed: {
     selectedList() {
@@ -180,6 +170,10 @@ createApp({
       this.selectedList.tasks = this.selectedList.tasks.filter(
         (t) => !t.completed
       );
+    },
+    toggleDarkmode() {
+      this.state.darkmode = !this.state.darkmode;
+      document.body.dataset.bsTheme = this.state.darkmode ? "dark" : "light";
     },
   },
 }).mount("#app");

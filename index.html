@@ -65,6 +65,21 @@
               >{{ list.name }}</a
             >
           </li>
+          <li><hr class="dropdown-divider" /></li>
+          <li class="ps-2">
+            <div class="form-check form-switch">
+              <label class="form-check-label"
+                ><input
+                  class="form-check-input"
+                  type="checkbox"
+                  role="switch"
+                  :checked="state.darkmode"
+                  @change="toggleDarkmode"
+                />
+                Darkmode
+              </label>
+            </div>
+          </li>
         </ul>
       </div>
       <div
